@@ -31,7 +31,7 @@ public class GeneratorJava {
 
             for (int i = 0; i < sheetCount; i++) {
                 Sheet sheet = workbook.getSheetAt(i);
-                  String tabName = sheet.getRow(0).getCell(1).getStringCellValue();
+                String tabName = sheet.getRow(0).getCell(1).getStringCellValue();
                 String tabCNName = sheet.getRow(0).getCell(0).getStringCellValue();
                 String pkName = sheet.getRow(2).getCell(0).getStringCellValue().toLowerCase();
                 System.out.println();
@@ -71,7 +71,7 @@ public class GeneratorJava {
                 System.out.println();
 
                 //mapper.xml------------------------------------------------------------------------------------------------------------------
-                String item="item.";
+                String item = "item.";
                 temp = "";
                 temp = createSelectSQl(noPerTabName, firstUpperTabName, lowTabName, rows, sheet);
 
@@ -80,27 +80,27 @@ public class GeneratorJava {
                         "    <insert id=\"add" + noPerTabName + "List\" " + " parameterType=\"java.util.List\">\n" +
                                 "        begin\n" +
                                 "        <foreach collection=\"list\" item=\"item\" >\n";
-                temp += mergeSql(lowTabName, pkName,item);
+                temp += mergeSql(lowTabName, pkName, item);
                 temp += "           update \n";
-                temp += updateSql(rows, sheet, lowTabName,item);
+                temp += updateSql(rows, sheet, lowTabName, item);
                 temp += "        WHEN NOT MATCHED THEN\n";
                 temp += "        insert \n";
-                temp += insertSql(rows, sheet, lowTabName,item);
-                temp +="        </foreach>\n" +
-                        "        end ;\n"+
+                temp += insertSql(rows, sheet, lowTabName, item);
+                temp += "        </foreach>\n" +
+                        "        end ;\n" +
                         "    </insert>\n" +
-                                "\n";
+                        "\n";
 
 
                 //insert
                 temp +=
                         "    <insert id=\"add" + noPerTabName + "\" " + " parameterType=\"com.kyee.nqm.personalFile.domain.Per" + noPerTabName + "\">\n";
-                temp += mergeSql(lowTabName, pkName,"");
+                temp += mergeSql(lowTabName, pkName, "");
                 temp += "           update \n";
-                temp += updateSql(rows, sheet, lowTabName,"");
+                temp += updateSql(rows, sheet, lowTabName, "");
                 temp += "        WHEN NOT MATCHED THEN\n";
                 temp += "        insert \n";
-                temp += insertSql(rows, sheet, lowTabName,"");
+                temp += insertSql(rows, sheet, lowTabName, "");
                 temp +=
                         "    </insert>\n" +
                                 "\n";
@@ -117,7 +117,7 @@ public class GeneratorJava {
                 //update
                 temp += "    <update id=\"update" + noPerTabName + "\" " + " parameterType=\"com.kyee.nqm.personalFile.domain.Per" + noPerTabName + "\">\n" +
                         "           update " + lowTabName + "\n";
-                temp += updateSql(rows, sheet, lowTabName,"");
+                temp += updateSql(rows, sheet, lowTabName, "");
                 temp +=
                         "       where " + pkName + "=" + "#{" + underlineToCamel(pkName) + "} and is_delete != 'Y'\n" +
                                 "    </update>\n" +
@@ -191,7 +191,7 @@ public class GeneratorJava {
         return temp;
     }
 
-    public static String updateSql(int rows, Sheet sheet, String lowTabName,String item) {
+    public static String updateSql(int rows, Sheet sheet, String lowTabName, String item) {
         String temp = "";
         temp =
                 "           <set>\n";
@@ -202,14 +202,14 @@ public class GeneratorJava {
             type = changeType(type);
             String tmpParam = underlineToCamel(param);
             String dateParm = "";
-            if(param.toLowerCase().contains("creat")){
+            if (param.toLowerCase().contains("creat")) {
                 continue;
             }
-            if("create_date".equals(param.toLowerCase()) || "update_date".equals(param.toLowerCase()))
-                type="TIMESTAMP";
+            if ("create_date".equals(param.toLowerCase()) || "update_date".equals(param.toLowerCase()))
+                type = "TIMESTAMP";
             dateParm = "#{" + item + tmpParam + ",jdbcType=" + type + "}";
             temp += "                <if test=\"" + item + tmpParam + " != null" + " \">\n";
-                temp += "                     " + param + "=" + dateParm + ",\n";
+            temp += "                     " + param + "=" + dateParm + ",\n";
             temp += "                </if>\n";
         }
         temp +=
@@ -217,7 +217,7 @@ public class GeneratorJava {
         return temp;
     }
 
-    public static String mergeSql(String lowTabName, String pkName,String item) {
+    public static String mergeSql(String lowTabName, String pkName, String item) {
         String temp = "";
         temp = "        MERGE INTO " + lowTabName + " a\n" +
                 "        USING (SELECT #{" + item + underlineToCamel(pkName) + "} as " + pkName + " FROM dual) b\n" +
@@ -226,7 +226,7 @@ public class GeneratorJava {
         return temp;
     }
 
-    public static String insertSql(int rows, Sheet sheet, String lowTabName,String item) {
+    public static String insertSql(int rows, Sheet sheet, String lowTabName, String item) {
         String temp = "";
         temp =
                 "        (";
@@ -235,8 +235,7 @@ public class GeneratorJava {
             String param = r.getCell(0).getStringCellValue();
             if (row == rows - 1) {
                 temp += param + ")";
-            }
-            else {
+            } else {
                 temp += param + ",";
             }
             if ((row - 1) % 6 == 0 && row != rows - 1)
@@ -252,11 +251,11 @@ public class GeneratorJava {
             String tmpParam = underlineToCamel(param);
             String type = r.getCell(2).getStringCellValue();
             type = changeType(type);
-            if("create_date".equals(param.toLowerCase()) || "update_date".equals(param.toLowerCase()))
-                type="TIMESTAMP";
+            if ("create_date".equals(param.toLowerCase()) || "update_date".equals(param.toLowerCase()))
+                type = "TIMESTAMP";
             tmpParam = "#{" + item + tmpParam + ",jdbcType=" + type + "}";
-            if("is_delete".equals(param))
-                tmpParam="'N'";
+            if ("is_delete".equals(param))
+                tmpParam = "'N'";
             if (row == rows - 1)
                 temp += tmpParam + ")";
             else
@@ -264,7 +263,7 @@ public class GeneratorJava {
             if ((row - 1) % 6 == 0 && row != rows - 1)
                 temp += "\n" + "        ";
         }
-        temp += ";"+"\n";
+        temp += ";" + "\n";
         return temp;
     }
 
@@ -273,11 +272,11 @@ public class GeneratorJava {
                 "<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\" \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">\n" +
                 "<mapper namespace=\"com.kyee.nqm.personalFile.dao.impl." + noPerTabName + "Dao\">\n" +
                 "\n" +
-                "    <resultMap id=\"SelectResultMap\" type=\"com.kyee.nqm.personalFile.domain."+firstUpperTabName+"\" >\n" +
+                "    <resultMap id=\"SelectResultMap\" type=\"com.kyee.nqm.personalFile.domain." + firstUpperTabName + "\" >\n" +
                 "        <result column=\"create_date\" property=\"createDate\" jdbcType=\"TIMESTAMP\" />\n" +
                 "        <result column=\"update_date\" property=\"updateDate\" jdbcType=\"TIMESTAMP\" />\n" +
-                "    </resultMap>\n"+
-                "\n"+
+                "    </resultMap>\n" +
+                "\n" +
                 "    <select id=\"get" + noPerTabName + "\" resultMap=\"SelectResultMap\">\n" +
                 "        SELECT\n" +
                 "        ";
