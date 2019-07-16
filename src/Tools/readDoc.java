@@ -24,7 +24,7 @@ public class readDoc {
 
     //preItemId很多地方有问题
     public static void main(String[] args) throws IOException {
-        File tmpDocFile = new File("C:\\Users\\37645\\Desktop\\上报文件存档\\不良事件\\test");
+        File tmpDocFile = new File("C:\\Users\\37645\\Desktop\\上报文件存档\\备份\\不良事件\\test");
         File[] docFiles = tmpDocFile.listFiles();
         int m1=0,m2=1,m3=0,m4=1;
         boolean psLock=false;
@@ -100,7 +100,7 @@ public class readDoc {
         }
     }
 
-    private static String mToMstr(int m){
+    public static String mToMstr(int m){
         if(m>9){
             return String.valueOf(m);
         }else{
@@ -108,7 +108,7 @@ public class readDoc {
         }
     }
 
-    private static void sqlGen(String itemId,String itemName,String preItemId,int m1,String isAuditInfo){
+    public static void sqlGen(String itemId,String itemName,String preItemId,int m1,String isAuditInfo){
         String temp="insert into RPT_ITEM_DICT\n" +
                 "(ID, ITEM_ID, ITEM_NAME, PRE_ITEM_ID,DEFAULT_VALUE,IS_TITLE,FORM_TYPE,IS_AUDIT_INFO, IS_ENABLE, CREATE_DATE, CREATOR, CREATE_UNIT, UPDATE_DATE, UPDATER, UPDATE_UNIT , IS_DELETE )\n" +
                 "select RPT_SEQ.NEXTVAL, '"+itemId+"', '"+itemName+
