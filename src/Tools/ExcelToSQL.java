@@ -1,14 +1,13 @@
 package Tools;
 
-import com.sun.deploy.util.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.util.StringUtil;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +15,7 @@ public class ExcelToSQL {
 
     public static void main(String[] args) throws IOException,
             InvalidFormatException {
-        String test="adsa哈哈";
+        String test = "adsa哈哈";
         System.out.println(test.getBytes("GBK").length);
 //        loopPrint(1,22);
 //        File xlsFile = new File("C:/Users/37645/Desktop/新项目/护士证书维护表.xlsx");
@@ -114,7 +113,7 @@ public class ExcelToSQL {
 
 
             for (int i = 0; i < sheetCount; i++) {
-                try{
+                try {
                     Sheet sheet = workbook.getSheetAt(i);
                     String tabName = sheet.getRow(0).getCell(1).getStringCellValue();
                     String tabCNName = sheet.getRow(0).getCell(0).getStringCellValue();
@@ -132,7 +131,7 @@ public class ExcelToSQL {
                     String comment;
                     String type;
                     System.out.println("drop table " + tabName + " cascade constraints;");
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println(xlsFile.getName());
                 }
             }
@@ -204,9 +203,9 @@ public class ExcelToSQL {
                     comment = r.getCell(1).getStringCellValue();
                     type = r.getCell(2).getStringCellValue();
 //                    String defaultVar=r.getCell(3).getStringCellValue();
-                    String isNull="";
-                    if(null != r.getCell(4)){
-                        isNull=r.getCell(4).getStringCellValue();
+                    String isNull = "";
+                    if (null != r.getCell(4)) {
+                        isNull = r.getCell(4).getStringCellValue();
                     }
 
                     String tempStr;
@@ -214,19 +213,19 @@ public class ExcelToSQL {
 //                        tempStr=param + "    " + type + " default ('"+defaultVar+"')";
 //                    }
 
-                    if("is_delete".equals(param)){
-                        tempStr=param + "    " + type + " default ('N')";
+                    if ("is_delete".equals(param)) {
+                        tempStr = param + "    " + type + " default ('N')";
+                    } else {
+                        if ("create_date".equals(param) || "update_date".equals(param)) {
+                            tempStr = param + "    " + type + " default SYSDATE";
+                        } else {
+                            tempStr = param + "    " + type;
+                        }
                     }
-                    else {
-                        if("create_date".equals(param) || "update_date".equals(param))
-                            tempStr=param + "    " + type + " default SYSDATE";
-                        else
-                            tempStr=param + "    " + type ;
+                    if (!org.apache.commons.lang3.StringUtils.isEmpty(isNull)) {
+                        tempStr += "    " + "not null";
                     }
-                    if(!org.apache.commons.lang3.StringUtils.isEmpty(isNull)){
-                        tempStr+="    "+"not null";
-                    }
-                    tempStr+=",";
+                    tempStr += ",";
                     System.out.println(tempStr);
                 }
                 System.out.println(tabSpaceSql(tabName, pkName));
@@ -272,8 +271,9 @@ public class ExcelToSQL {
     }
 
     public static void loopPrint(int start, int end) {
-        for (int i = start; i <= end; i++)
+        for (int i = start; i <= end; i++){
             System.out.print(i + ",");
+        }
         System.out.println();
     }
 

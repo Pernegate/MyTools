@@ -15,5 +15,7 @@
     <orderEntry type="library" name="android-json-0.0.20131108.vaadin1" level="project" />
     <orderEntry type="library" name="lombok-1.16.16" level="project" />
     <orderEntry type="library" name="commons-io-2.4" level="project" />
+    <orderEntry type="library" name="bcprov-jdk15on-1.66" level="project" />
+    <orderEntry type="library" name="commons-codec-1.9" level="project" />
   </component>
 </module>

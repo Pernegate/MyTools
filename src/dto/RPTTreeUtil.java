@@ -31,8 +31,6 @@ public class RPTTreeUtil {
 
     private List<RPTTreeUtil> childrenList;
 
-    public RPTTreeUtil(){}
-
     public RPTTreeUtil(String id, String name, String pId,int level) {
         this.id = id;
         this.name = name;

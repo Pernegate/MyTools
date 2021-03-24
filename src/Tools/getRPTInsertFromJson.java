@@ -20,14 +20,14 @@ public class getRPTInsertFromJson {
 
     public static void main(String[] args) throws IOException {
 //        String readFileName = "C:\\Users\\37645\\Desktop\\上报文件存档\\demo\\Json";
-        String readFileName = "C:\\Users\\37645\\Desktop\\上报文件存档\\demo\\Json\\ReportUnplannedExtubation_sava.json";
-        String outputFileName = "C:\\Users\\37645\\Desktop\\上报文件存档\\demo\\out\\ReportUnplannedExtubation_sava.txt";
+        String readFileName = "C:\\Users\\37645\\Desktop\\上报文件存档\\demo\\Json\\ReportPressureInjury_save.json";
+        String outputFileName = "C:\\Users\\37645\\Desktop\\上报文件存档\\demo\\out\\ReportPressureInjury_save.txt";
         readFromDocAndDeal(readFileName, outputFileName);
 
     }
 
     public static void readFromDocAndDeal(String fileName, String outputFileName) throws IOException {
-        int m1 = 5, m2 = 0, m3 = 0, m4 = 0;
+        int m1 = 6, m2 = 0, m3 = 0, m4 = 0;
         StringBuilder sqlSb = new StringBuilder();
 
         File file = new File(fileName);

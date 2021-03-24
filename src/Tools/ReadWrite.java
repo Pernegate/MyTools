@@ -51,6 +51,8 @@ public class ReadWrite
                 String param;
                 String comment;
                 String type;
+                //个性化字段
+                String extra;
                 //生成java domain
                 for (int row = 2; row < rows; row++) {
                     Row r = sheet.getRow(row);
@@ -59,9 +61,15 @@ public class ReadWrite
                     type = r.getCell(2).getStringCellValue();
                     param = underlineToCamel(param);
                     type = changeType(type);
+
                     System.out.println("/**");
                     System.out.println(" * " + comment);
                     System.out.println(" **/");
+
+                    //@JsonProperty相关
+//                    extra= r.getCell(3).getStringCellValue();;
+//                    System.out.println("@JsonProperty(\""+extra+"\")");
+
                     System.out.println("private " + type + " " + param + ";");
                 }
             }
